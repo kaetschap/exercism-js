@@ -91,7 +91,7 @@ describe('Substitution cipher', () => {
     expect(cipher.decode('zabcdefghi')).toEqual('zzzzzzzzzz');
   });
 
-  xtest('can handle messages longer than the key', function() {
+  xtest('can handle messages longer than the key', () => {
     expect(new Cipher('abc').encode('iamapandabear'))
       .toEqual('iboaqcnecbfcr');
   });
