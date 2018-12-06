@@ -12,15 +12,27 @@ const generateKey = () => {
 
 const alphabetIndex = (letter) => alphabet.indexOf(letter);
 
-const computeShiftAsNumber = (keyLetter) => {
-  return alphabetIndex(keyLetter);
+const computeShiftAsNumber = (keyLetter, isEncode) => {
+  if (isEncode) {
+    return alphabetIndex(keyLetter);
+  } else {
+    return alphabet.length - alphabetIndex(keyLetter);
+  }
 };
 
-const translateLetter = (letterToTranslate, shiftDistance) => {
-  const correctedDistance = shiftDistance < 0 ? alphabet.length + shiftDistance : shiftDistance;
-  const alphabetCharIndex = alphabetIndex(letterToTranslate);
-  const shiftedLetterIndex = (alphabetCharIndex + correctedDistance) % alphabet.length;
-  return alphabet[shiftedLetterIndex];
+const translateMessage = (messageToTranslate, key, isEncode) => {
+  let alphabetCharIndex;
+  let shiftedLetterIndex;
+  let shiftDistance;
+  let translatedMessage = '';
+
+  for (let i = 0; i < messageToTranslate.length; i++) {
+    shiftDistance = computeShiftAsNumber(key[i % key.length], isEncode);
+    alphabetCharIndex = alphabetIndex(messageToTranslate[i]);
+    shiftedLetterIndex = (alphabetCharIndex + shiftDistance) % alphabet.length;
+    translatedMessage += alphabet[shiftedLetterIndex];
+  }
+  return translatedMessage;
 };
 
 export class Cipher {
@@ -40,22 +52,10 @@ export class Cipher {
   }
 
   encode(messageToEncode) {
-    let encodedMessage = '';
-    let shift;
-    for (let i = 0; i < messageToEncode.length; i++) {
-      shift = computeShiftAsNumber(this.key[i % this.key.length]);
-      encodedMessage += translateLetter(messageToEncode[i], shift);
-    }
-    return encodedMessage;
+    return translateMessage(messageToEncode, this.key, true);
   }
 
   decode(messageToDecode) {
-    let decodedMessage = '';
-    let shift;
-    for (let j = 0; j < messageToDecode.length; j++) {
-      shift = -computeShiftAsNumber(this.key[j % this.key.length]);
-      decodedMessage += translateLetter(messageToDecode[j], shift);
-    }
-    return decodedMessage;
+    return translateMessage(messageToDecode, this.key, false);
   }
 }
