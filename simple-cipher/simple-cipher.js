@@ -1,6 +1,4 @@
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-const aCharCode = 'a'.charCodeAt(0);
-
 
 const generateKey = () => {
   let randomKey = '';
@@ -12,7 +10,20 @@ const generateKey = () => {
   return randomKey;
 };
 
-class Cipher {
+const alphabetIndex = (letter) => alphabet.indexOf(letter);
+
+const computeShiftAsNumber = (keyLetter) => {
+  return alphabetIndex(keyLetter);
+};
+
+const translateLetter = (letterToTranslate, shiftDistance) => {
+  const correctedDistance = shiftDistance < 0 ? alphabet.length + shiftDistance : shiftDistance;
+  const alphabetCharIndex = alphabetIndex(letterToTranslate);
+  const shiftedLetterIndex = (alphabetCharIndex + correctedDistance) % alphabet.length;
+  return alphabet[shiftedLetterIndex];
+};
+
+export class Cipher {
 
   constructor(key) {
     if (key === '') {
@@ -28,25 +39,12 @@ class Cipher {
     }
   }
 
-  computeShiftAsNumber(keyLetter) {
-    return keyLetter.charCodeAt(0) - 'a'.charCodeAt(0);
-  }
-
-  translateLetter(letterToTranslate, shiftDistance) {
-    const correctedDistance = shiftDistance < 0 ? alphabet.length + shiftDistance : shiftDistance;
-    const unicodeCharNumber = letterToTranslate.charCodeAt(0);
-    const alphabetCharIndex = unicodeCharNumber - aCharCode;
-    const returnLetter = String.fromCharCode(
-      ((alphabetCharIndex + correctedDistance) % alphabet.length) + aCharCode);
-    return returnLetter;
-  }
-
   encode(messageToEncode) {
     let encodedMessage = '';
     let shift;
     for (let i = 0; i < messageToEncode.length; i++) {
-      shift = this.computeShiftAsNumber(this.key[i % this.key.length]);
-      encodedMessage += this.translateLetter(messageToEncode[i], shift);
+      shift = computeShiftAsNumber(this.key[i % this.key.length]);
+      encodedMessage += translateLetter(messageToEncode[i], shift);
     }
     return encodedMessage;
   }
@@ -55,11 +53,9 @@ class Cipher {
     let decodedMessage = '';
     let shift;
     for (let j = 0; j < messageToDecode.length; j++) {
-      shift = -this.computeShiftAsNumber(this.key[j % this.key.length]);
-      decodedMessage += this.translateLetter(messageToDecode[j], shift);
+      shift = -computeShiftAsNumber(this.key[j % this.key.length]);
+      decodedMessage += translateLetter(messageToDecode[j], shift);
     }
     return decodedMessage;
   }
 }
-
-module.exports = {Cipher};
