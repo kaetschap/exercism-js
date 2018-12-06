@@ -62,4 +62,4 @@ class Cipher {
   }
 }
 
-module.exports = Cipher;
+module.exports = {Cipher};

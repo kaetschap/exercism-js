@@ -1,4 +1,5 @@
-import Cipher from './simple-cipher';
+/* eslint-disable no-new */
+import { Cipher } from './simple-cipher';
 
 describe('Random key generation', () => {
   test('generates keys at random', () => {
@@ -45,6 +46,12 @@ describe('Incorrect key cipher', () => {
     }).toThrow(new Error('Bad key'));
   });
 
+  test('throws an error with a mixed-case key', () => {
+    expect(() => {
+      new Cipher('ABcdEF');
+    }).toThrow(new Error('Bad key'));
+  });
+
   test('throws an error with a numeric key', () => {
     expect(() => {
       new Cipher('12345');
@@ -54,6 +61,24 @@ describe('Incorrect key cipher', () => {
   test('throws an error with an empty key', () => {
     expect(() => {
       new Cipher('');
+    }).toThrow(new Error('Bad key'));
+  });
+
+  test('throws an error with a leading space', () => {
+    expect(() => {
+      new Cipher(' leadingspace');
+    }).toThrow(new Error('Bad key'));
+  });
+
+  test('throws an error with a punctuation mark', () => {
+    expect(() => {
+      new Cipher('hyphened-word');
+    }).toThrow(new Error('Bad key'));
+  });
+
+  test('throws an error with a single capital letter', () => {
+    expect(() => {
+      new Cipher('leonardoDavinci');
     }).toThrow(new Error('Bad key'));
   });
 });
