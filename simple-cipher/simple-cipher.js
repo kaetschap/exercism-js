@@ -21,24 +21,19 @@ const computeShiftAsNumber = (keyLetter, isEncode) => {
 };
 
 const translateMessage = (messageToTranslate, key, isEncode) => {
-  let alphabetCharIndex;
-  let shiftedLetterIndex;
-  let shiftDistance;
-  let translatedMessage = '';
 
-  for (let i = 0; i < messageToTranslate.length; i++) {
-    shiftDistance = computeShiftAsNumber(key[i % key.length], isEncode);
-    alphabetCharIndex = alphabetIndex(messageToTranslate[i]);
-    shiftedLetterIndex = (alphabetCharIndex + shiftDistance) % alphabet.length;
-    translatedMessage += alphabet[shiftedLetterIndex];
-  }
-  messageToTranslate.split('').map()
-  
-  return translatedMessage;
+  return messageToTranslate
+  .split('')
+  .map((c, i) => {
+      const shiftDistance = computeShiftAsNumber(key[i % key.length], isEncode);
+      const alphabetCharIndex = alphabetIndex(c);
+      const shiftedLetterIndex = (alphabetCharIndex + shiftDistance) % alphabet.length;
+      return alphabet[shiftedLetterIndex];
+  })
+  .join('');
 };
 
 export class Cipher {
-
   constructor(key) {
     if (key === '') {
       throw new Error('Bad key');
