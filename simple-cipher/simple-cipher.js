@@ -32,6 +32,8 @@ const translateMessage = (messageToTranslate, key, isEncode) => {
     shiftedLetterIndex = (alphabetCharIndex + shiftDistance) % alphabet.length;
     translatedMessage += alphabet[shiftedLetterIndex];
   }
+  messageToTranslate.split('').map()
+  
   return translatedMessage;
 };
 

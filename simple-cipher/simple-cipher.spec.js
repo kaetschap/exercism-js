@@ -1,6 +1,7 @@
 /* eslint-disable no-new */
 import { Cipher } from './simple-cipher';
 
+
 describe('Random key generation', () => {
   test('generates keys at random', () => {
     // Strictly speaking, this is difficult to test with 100% certainty.
