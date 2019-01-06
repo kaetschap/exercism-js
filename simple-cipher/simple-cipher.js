@@ -10,27 +10,27 @@ const generateKey = () => {
   return randomKey;
 };
 
-const alphabetIndex = (letter) => alphabet.indexOf(letter);
+const alphabetIndex = letter => alphabet.indexOf(letter);
 
 const computeShiftAsNumber = (keyLetter, isEncode) => {
   if (isEncode) {
     return alphabetIndex(keyLetter);
-  } else {
-    return alphabet.length - alphabetIndex(keyLetter);
   }
+
+  return alphabet.length - alphabetIndex(keyLetter);
 };
 
 const translateMessage = (messageToTranslate, key, isEncode) => {
 
   return messageToTranslate
-  .split('')
-  .map((c, i) => {
+    .split('')
+    .map((c, i) => {
       const shiftDistance = computeShiftAsNumber(key[i % key.length], isEncode);
       const alphabetCharIndex = alphabetIndex(c);
       const shiftedLetterIndex = (alphabetCharIndex + shiftDistance) % alphabet.length;
       return alphabet[shiftedLetterIndex];
-  })
-  .join('');
+    })
+    .join('');
 };
 
 export class Cipher {
